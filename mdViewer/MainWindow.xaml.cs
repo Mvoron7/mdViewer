@@ -13,6 +13,7 @@ namespace WPFUserInterface
         private Markdown markdown;
         private string source;
         private string HtmlStyle;
+        private FileSystemWatcher watcher;
 
         public MainWindow()
         {
@@ -23,9 +24,16 @@ namespace WPFUserInterface
         {
             markdown = new Markdown();
 
+            watcher = new FileSystemWatcher();
+            watcher.Changed += Watcher_Changed;
+
             timer = new Timer(5000);
             timer.Elapsed += new ElapsedEventHandler(Refresh);
             timer.Start();
+        }
+
+        private void Watcher_Changed(object sender, FileSystemEventArgs e) {
+            throw new NotImplementedException();
         }
 
         private async void Refresh(object sender, ElapsedEventArgs e)
@@ -50,8 +58,10 @@ namespace WPFUserInterface
 
         private void Source_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-            if (File.Exists(Source.Text))
+            if (File.Exists(Source.Text)) {
                 source = Source.Text;
+                
+            }
         }
 
         private async void Style_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
