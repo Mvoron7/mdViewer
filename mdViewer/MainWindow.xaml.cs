@@ -1,15 +1,13 @@
-﻿using HeyRed.MarkdownSharp;
-using System;
+﻿using System;
 using System.IO;
-using System.Timers;
 using System.Windows;
 using System.Windows.Threading;
+using HeyRed.MarkdownSharp;
 
 namespace WPFUserInterface
 {
     public partial class MainWindow : Window
     {
-        private Timer timer;
         private Markdown markdown;
         private string source;
         private string HtmlStyle;
@@ -25,18 +23,16 @@ namespace WPFUserInterface
             markdown = new Markdown();
 
             watcher = new FileSystemWatcher();
-            watcher.Changed += Watcher_Changed;
-
-            timer = new Timer(5000);
-            timer.Elapsed += new ElapsedEventHandler(Refresh);
-            timer.Start();
+            watcher.NotifyFilter = NotifyFilters.Attributes;
+            watcher.Changed += Changed;
         }
 
-        private void Watcher_Changed(object sender, FileSystemEventArgs e) {
-            throw new NotImplementedException();
+        private void Changed(object sender, FileSystemEventArgs e)
+        {
+            Refresh();
         }
 
-        private async void Refresh(object sender, ElapsedEventArgs e)
+        private async void Refresh()
         {
             if (!File.Exists(source))
                 return;
@@ -51,17 +47,18 @@ namespace WPFUserInterface
             }
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            timer.Stop();
-        }
-
         private void Source_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-            if (File.Exists(Source.Text)) {
-                source = Source.Text;
-                
-            }
+            if (!File.Exists(Source.Text))
+                return;
+
+            FileInfo info = new FileInfo(Source.Text);
+            source = Source.Text;
+            watcher.Path = info.DirectoryName;
+            watcher.Filter = info.Name;
+            watcher.EnableRaisingEvents = true;
+
+            Refresh();
         }
 
         private async void Style_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
@@ -73,14 +70,6 @@ namespace WPFUserInterface
                     HtmlStyle = await reader.ReadToEndAsync();
                 }
             }
-        }
-
-        private void StartStopTimer(object sender, RoutedEventArgs e)
-        {
-            if (timer.Enabled)
-                timer.Stop();
-            else
-                timer.Start();
         }
 
         private void DoInvoke(Action action, DispatcherPriority priority = DispatcherPriority.Normal)
