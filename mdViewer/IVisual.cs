@@ -6,5 +6,6 @@ namespace mdViewer {
         event Action<string> StyleChanged;
 
         void SetHtml(string html);
+        void Show();
     }
 }

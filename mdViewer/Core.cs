@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using HeyRed.MarkdownSharp;
 
@@ -23,6 +24,10 @@ namespace mdViewer {
             watcher = new FileSystemWatcher();
             watcher.NotifyFilter = NotifyFilters.Attributes;
             watcher.Changed += Changed;
+        }
+
+        internal void Start() {
+            _window.Show();
         }
 
         private void Source_TextChanged(string fileName) {
