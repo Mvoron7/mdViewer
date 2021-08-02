@@ -1,7 +1,7 @@
-﻿<Application x:Class="WPFUserInterface.App"
+﻿<Application x:Class="mdViewer.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:WPFUserInterface"
+             xmlns:local="clr-namespace:mdViewer"
              StartupUri="StartWindow.xaml">
     <Application.Resources>
          

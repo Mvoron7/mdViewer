@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WPFUserInterface.Properties
+namespace mdViewer.Properties
 {
 
 
