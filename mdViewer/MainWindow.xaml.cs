@@ -25,12 +25,12 @@ namespace mdViewer {
 
         private void Source_TextChanged(object sender, TextChangedEventArgs e)
         {
-            SourceChanged.Invoke(Source.Text);
+            SourceChanged?.Invoke(Source.Text);
         }
 
         private void Style_TextChanged(object sender, TextChangedEventArgs e)
         {
-            StyleChanged.Invoke(FileOfStyle.Text);
+            StyleChanged?.Invoke(FileOfStyle.Text);
         }
 
         private void DoInvoke(Action action, DispatcherPriority priority = DispatcherPriority.Normal)
