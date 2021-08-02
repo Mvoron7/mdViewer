@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using HeyRed.MarkdownSharp;
@@ -8,6 +9,7 @@ namespace WPFUserInterface
 {
     public partial class MainWindow : Window
     {
+        private const int MillisecondsDelay = 50;
         private Markdown markdown;
         private string source;
         private string HtmlStyle;
@@ -37,13 +39,15 @@ namespace WPFUserInterface
             if (!File.Exists(source))
                 return;
 
+            await Task.Delay(MillisecondsDelay);
+
             using (StreamReader reader = new StreamReader(source))
             {
-                string source = await reader.ReadToEndAsync();
-                source = markdown.Transform(source);
+                string html = await reader.ReadToEndAsync();
+                html = markdown.Transform(html);
                 if (!string.IsNullOrEmpty(HtmlStyle))
-                    source = $"<style>{HtmlStyle}</style>{source}";
-                DoInvoke(() => brow.NavigateToString(source));
+                    html = $"<style>{HtmlStyle}</style>{html}";
+                DoInvoke(() => brow.NavigateToString(html));
             }
         }
 
